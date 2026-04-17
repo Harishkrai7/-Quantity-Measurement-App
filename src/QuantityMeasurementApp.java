@@ -3,7 +3,9 @@ public class QuantityMeasurementApp {
     // -------- Enum for Units --------
     enum Unit {
         FEET(1.0),
-        INCH(1.0 / 12.0);  // 1 inch = 1/12 feet
+        INCH(1.0 / 12.0),          // 1 inch = 1/12 feet
+        YARD(3.0),                 // 1 yard = 3 feet
+        CM(0.393701 / 12.0);       // 1 cm = 0.393701 inch → convert to feet
 
         private final double toFeetFactor;
 
@@ -37,7 +39,6 @@ public class QuantityMeasurementApp {
                 return false;
             }
 
-            // Convert both to base unit (feet)
             double thisValueInFeet = this.unit.toBase(this.value);
             double otherValueInFeet = other.unit.toBase(other.value);
 
@@ -48,15 +49,24 @@ public class QuantityMeasurementApp {
     // -------- Main Method --------
     public static void main(String[] args) {
 
-        // Same unit comparison (like UC1)
+        // UC1 style (same unit)
         Quantity q1 = new Quantity(5.0, Unit.FEET);
         Quantity q2 = new Quantity(5.0, Unit.FEET);
 
-        // Different unit comparison (UC3 feature)
+        // UC3 style (feet vs inches)
         Quantity q3 = new Quantity(1.0, Unit.FEET);
         Quantity q4 = new Quantity(12.0, Unit.INCH);
 
-        System.out.println("Feet vs Feet: " + q1.equals(q2));     // true
-        System.out.println("Feet vs Inches: " + q3.equals(q4));   // true
+        // UC4 new units
+        Quantity q5 = new Quantity(1.0, Unit.YARD);   // 1 yard = 3 feet
+        Quantity q6 = new Quantity(3.0, Unit.FEET);
+
+        Quantity q7 = new Quantity(2.54, Unit.CM);    // 2.54 cm = 1 inch
+        Quantity q8 = new Quantity(1.0, Unit.INCH);
+
+        System.out.println("Feet vs Feet: " + q1.equals(q2));       // true
+        System.out.println("Feet vs Inches: " + q3.equals(q4));     // true
+        System.out.println("Yard vs Feet: " + q5.equals(q6));       // true
+        System.out.println("CM vs Inches: " + q7.equals(q8));       // true
     }
 }
